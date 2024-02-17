@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+  .container{
+    border:2px solid black;
+    display: flex;
+    flex-direction: column;
+    width:400px;
+    height: 200px;
+    text-align: center;
+    padding: 10px;
+    gap:6px
+  }
+  img{
+    width:150px;
+    height:150px;
+  }
+  #gallery{
+    display: flex;
+    flex-wrap: wrap;
+    width:400px;
+  }
+ 
+   
+  </style>
+  <body>
+
+    <div class="container">
+      <h1>API</h1>
+       <label for="inp">Enter the number of kitties:</label>
+      <input type="text" id="inp">
+      <small id="error"></small>
+      <button id="btn">Display</button>
+    </div>
+    <div class="gallery" id="gallery"></div>
+   
+  </body>
+  <script>
+    const cat_result=document.getElementById('gallery');
+    const error=document.getElementById('error');
+    const btn=document.getElementById('btn');
+    btn.addEventListener("click",function()
+    {
+        const inputValue=document.getElementById('inp').value;
+        error.innerHTML="";
+
+        if(!inputValue.match(/^[0-9]+$/))
+        {
+            return error.innerHTML="Enter a valid number"
+        }
+        if(parseInt(inputValue)>100)
+        {
+            return error.innerHTML="Number should be less than or equal to 100"
+        }
+
+        allImages="";
+        fetch(`https://api.thecatapi.com/v1/images/search?limit=${inputValue}&page=10&order=Desc`)
+        .then((res)=>res.json())
+        .then((res)=>{
+          for(let i =0;i<inputValue;i++)
+          {
+              allImages+=`<img src=${res[i].url}>`
+          }
+          cat_result.innerHTML=allImages;
+        })
+    })
+
+   
+  </script>
+   
+</html>
